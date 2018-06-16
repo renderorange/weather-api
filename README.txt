@@ -13,7 +13,7 @@ This project provides a simple API, written in nodejs, which reads and serves se
     [06152018-233738] [info] serving: 0.0.0.0:3000
     [06152018-233948] 10.0.0.103 GET /weather/temperature 200
 
-    laptop ~ $ curl -X GET -H 'API_KEY: 1234qwerty' http://server:3000/weather/temperature | json_pp
+    laptop ~ $ curl -X GET -H 'API_KEY: 1234qwerty' http://server:3000/weather/temperature
     {
        "last" : 1496113521,
        "temperature" : 85
