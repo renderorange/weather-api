@@ -94,7 +94,7 @@ Everything in the request was good and there were no issues on the backend.
 
 # LOGGING
 
-The API outputs timestamped startup info to stdout, as well as request details and response, in similar fashion to Apache's access-log.
+The API outputs timestamped startup info to stdout, as well as request and response details, in similar fashion to Apache's access-log.
 
     [06162018-002138] [info] weather api server started
     [06162018-002138] [info] serving: 0.0.0.0:3000
