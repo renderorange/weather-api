@@ -90,11 +90,11 @@ The requested route was not known.
 
 ## 200 (ok)
 
-It's an older code, sir, but it checks out.
+Everything in the request was good and there were no issues on the backend.
 
 # LOGGING
 
-The server outputs timestamped startup info, as well as request details, in similar fashion to Apache's access-log.
+The API outputs timestamped startup info to stdout, as well as request details and response, in similar fashion to Apache's access-log.
 
     [06162018-002138] [info] weather api server started
     [06162018-002138] [info] serving: 0.0.0.0:3000
@@ -105,7 +105,7 @@ The server outputs timestamped startup info, as well as request details, in simi
 
 # CONFIGURATION
 
-The API requires configuration settings which are stored and defined within the ./config/application.js file, located within the project's base dir.  The config object is exported and accessed within weather.js.
+The API requires configuration settings which are stored and defined within the ./config/application.js file located within the project's base dir.  The config object is exported and accessed within weather.js.
 
     # ./config/application.js
     config.hostname = '0.0.0.0';
@@ -126,11 +126,11 @@ The authorization header string to validate against.
 
 # DEPENDENCIES
 
-This projects is built using nodejs, and utilizes both deconstructing assignment and template literals.  Because of this, the latest nodejs is recommended.
+This project is built using nodejs and utilizes both deconstructing assignment and template literals from ES6.  Because of this, the latest (or newer) nodejs is recommended.
 
-The http library and methods are utilized, but provided through core nodejs, so no additional install is required.
+The http library is used but is included through nodejs core.  No additional installation is required.
 
-The moment library is also used, and should be installed via npm (or whatever other way you'd prefer, really).
+The moment library is also used and must be installed via npm (or whatever other way you'd prefer).
 
 # AUTHOR
 
