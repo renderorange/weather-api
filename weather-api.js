@@ -1,6 +1,6 @@
 // weather-api
 // microservice in nodejs
-// v 0.1.1
+// v 0.1.2
 
 "use strict";
 
