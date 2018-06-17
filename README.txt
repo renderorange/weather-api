@@ -13,7 +13,7 @@ This project provides a simple API, written in nodejs, which reads and serves se
     [06152018-233738] [info] serving: 0.0.0.0:3000
     [06152018-233948] 10.0.0.103 GET /weather/temperature 200
 
-    laptop ~ $ curl -X GET -H 'API_KEY: 1234qwerty' http://server:3000/weather/temperature
+    laptop ~ $ curl -X GET -H 'API_KEY: 1234qwerty' server:3000/weather/temperature
     {
        "last" : 1496113521,
        "temperature" : 85
@@ -21,7 +21,7 @@ This project provides a simple API, written in nodejs, which reads and serves se
 
 # ENDPOINTS
 
-The API is served by default over port 3000, but can be configured for others (more about that in the CONFIGURATION section below).
+The API is served port 3000 listening on all interfaces, but can be configured to a specific interface or other port (more about that in the CONFIGURATION section below).
 
 ## /weather
 
@@ -29,7 +29,7 @@ The API is served by default over port 3000, but can be configured for others (m
 
 #### GET
 
-This API is a read-only resource; GET is the only provided method.
+This API is a read-only resource; GET is the only allowed method.
 
 All other methods requested to the API will return exceptions (more about that in the EXCEPTIONS section below).
 
@@ -105,22 +105,22 @@ The server outputs timestamped startup info, as well as request details, in simi
 
 # CONFIGURATION
 
-The API requires configuration settings which are stored and defined within the weather-api.rc file, located within the base project dir.
+The API requires configuration settings which are stored and defined within the ./config/application.js file, located within the project's base dir.  The config object is exported and accessed within weather.js.
 
-    # weather-api.rc
-    hostname=0.0.0.0
-    port=3000
-    api_key=1234qwerty
+    # ./config/application.js
+    config.hostname = '0.0.0.0';
+    config.port     = 3000;
+    config.api_key  = '1234qwerty';
 
-## hostname
+## config.hostname
 
 The address to bind to.
 
-## port
+## config.port
 
 The port to listen on.
 
-## api_key
+## config.api_key
 
 The authorization header string to validate against.
 
