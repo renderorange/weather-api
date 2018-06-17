@@ -21,7 +21,7 @@ This project provides a simple API, written in nodejs, which reads and serves se
 
 # ENDPOINTS
 
-The API is served port 3000 listening on all interfaces, but can be configured to a specific interface or other port (more about that in the CONFIGURATION section below).
+The API is served over port 3000 and bound to all interfaces, but can be configured to a specific interface or port (more about that in the CONFIGURATION section below).
 
 ## /weather
 
