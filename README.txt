@@ -15,7 +15,6 @@ This project provides a simple API, written in nodejs, which reads and serves se
 
     laptop ~ $ curl -X GET -H 'API_KEY: 1234qwerty' server:3000/weather/temperature
     {
-       "last" : 1496113521,
        "temperature" : 85
     }
 
@@ -57,16 +56,11 @@ Provides the barometric pressure reading.
 
 ### RETURNS
 
-A JSON datastructure containing two key value pairs.
+A JSON datastructure containing one key value pair.
 
     {
-       "last" : 1496113521,
        "temperature" : 85
     }
-
-#### last
-
-Unix timestamp representing the mtime of the last reading.
 
 #### [temperature|humidity|pressure]
 

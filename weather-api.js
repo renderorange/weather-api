@@ -85,19 +85,17 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // TODO:
-    // read file according to what was requested
-    // send back formatted data structure
-    // mocking the data, remove when done
+    // read GPIO using pigpio (production) and pigpio-mock (development)
     let data_return = {};
 
     if ( parameter === 'temperature' ) {
-        data_return = { 'last' : 1496113521, 'temperature' : 85 };
+        data_return = { 'temperature' : 85 };
     }
     else if ( parameter === 'humidity' )  {
-        data_return = { 'last' : 1496113537, 'humidity' : 78 };
+        data_return = { 'humidity' : 78 };
     }
     else if ( parameter === 'pressure' )  {
-        data_return = { 'last' : 1496113537, 'pressure' : 29.93 };
+        data_return = { 'pressure' : 29.93 };
     }
     else {
         res.statusCode = 404;
