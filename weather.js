@@ -1,19 +1,13 @@
 // weather api
 // microservice in nodejs
-// v. 0.1.0
+// v 0.1.1
 
 "use strict";
 
+const fs     = require( 'fs' );
 const http   = require( 'http' );
 const moment = require( 'moment' );
-
-// TODO: read config from rc
-// for auth key, hostname, port
-const config = {
-    'hostname' : '0.0.0.0',
-    'port' : 3000,
-    'api_key' : '1234qwerty'
-};
+const config = require( './config/application.js' );
 
 const server = http.createServer( ( req, res ) => {
 
@@ -68,7 +62,7 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // validate the url
-    // return 404 if not /weather/[temperature|humidity]
+    // return 404 if not /weather/[temperature|humidity|pressure]
     // TODO: move the other validation up here
     let [ slash, endpoint, parameter, ...extra ] = url.split( '/' );
 
@@ -95,7 +89,7 @@ const server = http.createServer( ( req, res ) => {
     // read file according to what was requested
     // send back formatted data structure
     // mocking the data, remove when done
-    let data_return = '';
+    let data_return = {};
 
     if ( parameter === 'temperature' ) {
         data_return = { 'last' : 1496113521, 'temperature' : 85 };
