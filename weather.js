@@ -4,7 +4,6 @@
 
 "use strict";
 
-const fs     = require( 'fs' );
 const http   = require( 'http' );
 const moment = require( 'moment' );
 const config = require( './config/application.js' );
