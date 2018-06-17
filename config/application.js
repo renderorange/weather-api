@@ -1,4 +1,4 @@
-// weather api config
+// weather-api config
 
 let config = {};
 

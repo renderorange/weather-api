@@ -1,6 +1,6 @@
 # NAME
 
-weather api - microservice in nodejs
+weather-api - microservice in nodejs
 
 # DESCRIPTION
 
@@ -8,8 +8,8 @@ This project provides a simple API, written in nodejs, which reads and serves se
 
 # SYNOPSIS
 
-    server ~ $ nodejs weather.js 
-    [06152018-233738] [info] weather api server started
+    server ~ $ nodejs weather-api.js 
+    [06152018-233738] [info] weather-api server started
     [06152018-233738] [info] serving: 0.0.0.0:3000
     [06152018-233948] 10.0.0.103 GET /weather/temperature 200
 
@@ -96,7 +96,7 @@ Everything in the request was good and there were no issues on the backend.
 
 The API outputs timestamped startup info to stdout, as well as request and response details, in similar fashion to Apache's access-log.
 
-    [06162018-002138] [info] weather api server started
+    [06162018-002138] [info] weather-api server started
     [06162018-002138] [info] serving: 0.0.0.0:3000
     [06162018-002156] 10.0.0.103 GET /weather/humidity 401
     [06162018-002218] 10.0.0.103 GET /weather/humidity 200
@@ -105,7 +105,7 @@ The API outputs timestamped startup info to stdout, as well as request and respo
 
 # CONFIGURATION
 
-The API requires configuration settings which are stored and defined within the ./config/application.js file located within the project's base dir.  The config object is exported and accessed within weather.js.
+The API requires configuration settings which are stored and defined within the ./config/application.js file located within the project's base dir.  The config object is exported and accessed within weather-api.js.
 
     # ./config/application.js
     config.hostname = '0.0.0.0';
@@ -130,8 +130,10 @@ This project is built using nodejs and utilizes both deconstructing assignment a
 
 The http library is used but is included through nodejs core.  No additional installation is required.
 
-The moment library is also used and must be installed via npm (or whatever other way you'd prefer).
+The moment library is also used.  Moment is defined in the package.json file within the project's base dir, and can be installed via npm.
+
+    $ npm install
 
 # AUTHOR
 
-Blaine Motsinger
+Blaine Motsinger <blaine@renderorange.com>

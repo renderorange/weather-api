@@ -1,4 +1,4 @@
-// weather api
+// weather-api
 // microservice in nodejs
 // v 0.1.1
 
@@ -138,7 +138,7 @@ const server = http.createServer( ( req, res ) => {
 });
 
 server.listen( config.port, config.hostname, () => {
-    console.log( get_formatted_timestamp() + ' [info] ' + 'weather api server started' );
+    console.log( get_formatted_timestamp() + ' [info] ' + 'weather-api server started' );
     console.log( get_formatted_timestamp() + ' [info] ' + `serving: ${config.hostname}:${config.port}` );
 });
 
