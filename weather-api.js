@@ -1,6 +1,6 @@
 // weather-api
 // microservice in nodejs
-// v 0.1.2
+// v 0.1.3
 
 "use strict";
 
@@ -11,11 +11,11 @@ const config = require( './config/application.js' );
 const server = http.createServer( ( req, res ) => {
 
     // store the request information
-    const headers = req.headers;
+    const headers    = req.headers;
     const connection = req.connection;
-    const method = req.method;
-    const url = req.url;
-    const api_key = headers.api_key;
+    const method     = req.method;
+    const url        = req.url;
+    const api_key    = headers.api_key;
 
     // validate the api key
     // return 401 and error if api_key is missing or doesn't match
@@ -62,10 +62,12 @@ const server = http.createServer( ( req, res ) => {
 
     // validate the url
     // return 404 if not /weather/[temperature|humidity|pressure]
-    // TODO: move the other validation up here
     let [ slash, endpoint, parameter, ...extra ] = url.split( '/' );
 
-    if ( endpoint !== 'weather' || extra.length >= 1 ) {
+    // NOTE: this doesn't allow / at the end of the parameter match
+    let parameter_match = /^temperature$|^humidity$|^pressure$/;
+
+    if ( endpoint !== 'weather' || extra.length >= 1 || !parameter_match.test( parameter ) ) {
         res.statusCode = 404;
 
         res.setHeader( 'Content-Type', 'text/plain' );
@@ -96,24 +98,6 @@ const server = http.createServer( ( req, res ) => {
     }
     else if ( parameter === 'pressure' )  {
         data_return = { 'pressure' : 29.93 };
-    }
-    else {
-        res.statusCode = 404;
-
-        res.setHeader( 'Content-Type', 'text/plain' );
-
-        res.write( url + ' is not a known route\n' );
-        res.end();
-
-        log_request(
-            get_formatted_timestamp(),
-            connection.remoteAddress,
-            method,
-            url,
-            res.statusCode
-        );
-
-        return;
     }
 
     // the request was good
