@@ -1,6 +1,6 @@
 // weather-api
 // microservice in nodejs
-// v 0.1.3
+// v 0.1.4
 
 "use strict";
 
@@ -67,7 +67,7 @@ const server = http.createServer( ( req, res ) => {
     // NOTE: this doesn't allow / at the end of the parameter match
     let parameter_match = /^temperature$|^humidity$|^pressure$/;
 
-    if ( endpoint !== 'weather' || extra.length >= 1 || !parameter_match.test( parameter ) ) {
+    if ( endpoint !== 'weather' || !parameter_match.test( parameter ) || extra.length >= 2 ) {
         res.statusCode = 404;
 
         res.setHeader( 'Content-Type', 'text/plain' );
