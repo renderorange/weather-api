@@ -64,9 +64,9 @@ const server = http.createServer( ( req, res ) => {
     // return 404 if not /weather/[temperature|humidity|pressure]
     let [ slash, endpoint, parameter, ...extra ] = url.split( '/' );
 
-    // NOTE: this doesn't allow / at the end of the parameter match
     let parameter_match = /^temperature$|^humidity$|^pressure$/;
 
+    // NOTE: this allows a trailing slash, but no additional parameters to the endpoint
     if ( endpoint !== 'weather' || !parameter_match.test( parameter ) || extra.length >= 2 ) {
         res.statusCode = 404;
 
