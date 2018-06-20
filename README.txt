@@ -176,10 +176,10 @@ The API requires configuration settings which are stored and defined within the 
     config.api_key     = '1234qwerty';
     config.environment = 'development';
     config.pins        = {
-    'temperature' : 3,
-    'humidity'    : 4,
-    'pressure'    : 5,
-};
+        'temperature' : 3,
+        'humidity'    : 4,
+        'pressure'    : 5,
+    };
 
 ## config.hostname
 
