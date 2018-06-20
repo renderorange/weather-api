@@ -155,7 +155,7 @@ function read_pin ( pin ) {
     }
     else {
         // TODO: read pin from sysfs and set to value
-        value = 42
+        value = 42;
     }
 
     return value;
