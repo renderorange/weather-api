@@ -12,7 +12,7 @@ config.environment = 'development';
 config.pins        = {
     'temperature' : 3,
     'humidity'    : 4,
-    'pressure'    : 5,
+    'pressure'    : 5
 };
 
 module.exports = config;

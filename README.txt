@@ -178,7 +178,7 @@ The API requires configuration settings which are stored and defined within the 
     config.pins        = {
         'temperature' : 3,
         'humidity'    : 4,
-        'pressure'    : 5,
+        'pressure'    : 5
     };
 
 ## config.hostname
@@ -195,7 +195,7 @@ The authorization header string to validate against.
 
 ## config.environment
 
-Whether the api is running on development or production.  If development, the pigpio-mock library will be used to mock the data from the Raspberry Pi pins.
+Whether the api is running on development or production.  If development, random mock values will be returned instead of reading the values from sysfs.
 
 ## config.pins.temperature
 
