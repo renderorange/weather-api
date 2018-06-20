@@ -1,6 +1,6 @@
 // weather-api
 // microservice in nodejs
-// v 0.1.5
+// v 0.1.6
 
 "use strict";
 
@@ -86,17 +86,23 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // TODO:
-    // read GPIO using pigpio (production) and pigpio-mock (development)
+    // read pin out via sysfs (on production), otherwise mock values (on development)
     let data_return = {};
 
     if ( parameter === 'temperature' ) {
-        data_return = { 'temperature' : 85 };
+        let temperature = read_pin( config.pins.temperature );
+
+        data_return = { 'temperature' : temperature };
     }
     else if ( parameter === 'humidity' )  {
-        data_return = { 'humidity' : 78 };
+        let humidity = read_pin( config.pins.humidity );
+
+        data_return = { 'humidity' : humidity };
     }
     else if ( parameter === 'pressure' )  {
-        data_return = { 'pressure' : 29.93 };
+        let pressure = read_pin( config.pins.pressure );
+
+        data_return = { 'pressure' : pressure };
     }
 
     // the request was good
@@ -139,4 +145,18 @@ function log_request ( timestamp, remoteaddress, method, url, statuscode ) {
     );
 
     return;
+}
+
+function read_pin ( pin ) {
+    let value = {};
+
+    if ( config.environment === 'development' ) {
+        value = Math.floor( ( Math.random() * 100 ) + 1 );
+    }
+    else {
+        // TODO: read pin from sysfs and set to value
+        value = 42
+    }
+
+    return value;
 }

@@ -4,11 +4,11 @@ weather-api - microservice in nodejs
 
 # DESCRIPTION
 
-This project provides a simple API, written in nodejs, which reads and serves sensor data from the Raspberry Pi.
+This project provides a simple API, written in nodejs, which serves sensor data read from the Raspberry Pi via sysfs.
 
 # SYNOPSIS
 
-    server ~ $ nodejs weather-api.js 
+    server ~/weather-api $ nodejs weather-api.js 
     [06152018-233738] [info] weather-api server started
     [06152018-233738] [info] serving: 0.0.0.0:3000
     [06152018-233948] 10.0.0.103 GET /weather/temperature 200
@@ -171,9 +171,15 @@ The API outputs timestamped startup info to stdout, as well as request and respo
 The API requires configuration settings which are stored and defined within the ./config/application.js file located within the project's base dir.  The config object is exported and accessed within weather-api.js.
 
     # ./config/application.js
-    config.hostname = '0.0.0.0';
-    config.port     = 3000;
-    config.api_key  = '1234qwerty';
+    config.hostname    = '0.0.0.0';
+    config.port        = 3000;
+    config.api_key     = '1234qwerty';
+    config.environment = 'development';
+    config.pins        = {
+    'temperature' : 3,
+    'humidity'    : 4,
+    'pressure'    : 5,
+};
 
 ## config.hostname
 
@@ -187,6 +193,22 @@ The port to listen on.
 
 The authorization header string to validate against.
 
+## config.environment
+
+Whether the api is running on development or production.  If development, the pigpio-mock library will be used to mock the data from the Raspberry Pi pins.
+
+## config.pins.temperature
+
+The pin to read the temperature value from.
+
+## config.pins.humidity
+
+The pin to read the humidity value from.
+
+## config.pins.pressure
+
+The pin to read the pressure value from.
+
 # DEPENDENCIES
 
 This project is built using nodejs and utilizes both deconstructing assignment and template literals from ES6.  Because of this, the latest (or newer) nodejs is recommended.
@@ -194,8 +216,6 @@ This project is built using nodejs and utilizes both deconstructing assignment a
 The http library is used but is included through nodejs core.  No additional installation is required.
 
 The moment library is also used.  Moment is defined in the package.json file within the project's base dir, and can be installed via npm.
-
-    $ npm install
 
 # AUTHOR
 
