@@ -4,7 +4,7 @@ weather-api - microservice in nodejs
 
 # DESCRIPTION
 
-This project provides a simple API, written in nodejs, which serves sensor data read from the Raspberry Pi via sysfs.
+This project provides a simple API, written in nodejs, which serves sensor data read from the Raspberry Pi using the pigpio library.
 
 # SYNOPSIS
 
@@ -48,12 +48,6 @@ Provides the relative humidity reading in percent.
 
     http://server:3000/weather/humidity
 
-#### pressure
-
-Provides the barometric pressure reading.
-
-    http://server:3000/weather/pressure
-
 ### RETURNS
 
 A JSON datastructure containing one key value pair.
@@ -62,7 +56,7 @@ A JSON datastructure containing one key value pair.
        "temperature" : 85
     }
 
-#### [temperature|humidity|pressure]
+#### [temperature|humidity]
 
 The value read from the requested resource.
 
@@ -175,11 +169,7 @@ The API requires configuration settings which are stored and defined within the 
     config.port        = 3000;
     config.api_key     = '1234qwerty';
     config.environment = 'development';
-    config.pins        = {
-        'temperature' : 3,
-        'humidity'    : 4,
-        'pressure'    : 5
-    };
+    config.pin         = 3;
 
 ## config.hostname
 
@@ -195,19 +185,11 @@ The authorization header string to validate against.
 
 ## config.environment
 
-Whether the api is running on development or production.  If development, random mock values will be returned instead of reading the values from sysfs.
+Whether the api is running on development or production.  If development, random mock values will be returned instead of reading the values via gpio.
 
-## config.pins.temperature
+## config.pin
 
-The pin to read the temperature value from.
-
-## config.pins.humidity
-
-The pin to read the humidity value from.
-
-## config.pins.pressure
-
-The pin to read the pressure value from.
+The digital pin to read for the output.
 
 # DEPENDENCIES
 
@@ -215,7 +197,7 @@ This project is built using nodejs and utilizes both deconstructing assignment a
 
 The http library is used but is included through nodejs core.  No additional installation is required.
 
-The moment library is also used.  Moment is defined in the package.json file within the project's base dir, and can be installed via npm.
+Additionally, the moment and pigpio libraries are also used.  Both are defined in the package.json file within the project's base dir, and can be installed via npm.
 
 # AUTHOR
 

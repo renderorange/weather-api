@@ -1,6 +1,6 @@
 // weather-api
 // microservice in nodejs
-// v 0.1.7
+// v 0.1.8
 
 "use strict";
 
@@ -61,10 +61,10 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // validate the url
-    // return 404 if not /weather/[temperature|humidity|pressure]
+    // return 404 if not /weather/[temperature|humidity]
     let [ slash, endpoint, parameter, ...extra ] = url.split( '/' );
 
-    let parameter_match = /^temperature$|^humidity$|^pressure$/;
+    let parameter_match = /^temperature$|^humidity$/;
 
     if ( endpoint !== 'weather' || !parameter_match.test( parameter ) || extra.length >= 1 ) {
         res.statusCode = 404;
@@ -85,24 +85,25 @@ const server = http.createServer( ( req, res ) => {
         return;
     }
 
-    // TODO:
-    // read pin out via sysfs (on production), otherwise mock values (on development)
+    // TODO: read the sensor data
+    // looks like if we're going to use the DHT22, we're probably best using the pigpio library.
+    // to use the DHT22 sensor, we need to set HIGH, detect the state change, then digital read.
+    // also, we should to consider removing individual calls for getting just temp and humidity.
+    // since the sensor returns everything all in one call anyway, it might be more efficient to
+    // have one endpoint returning two key value pairs.
+    // or, perhaps return both if /weather and individual if asked /weather/temperature
+    let data        = read_pin( config.pin );
     let data_return = {};
 
     if ( parameter === 'temperature' ) {
-        let temperature = read_pin( config.pins.temperature );
+        let temperature = data.temperature;
 
         data_return = { 'temperature' : temperature };
     }
     else if ( parameter === 'humidity' )  {
-        let humidity = read_pin( config.pins.humidity );
+        let humidity = data.humidity;
 
         data_return = { 'humidity' : humidity };
-    }
-    else if ( parameter === 'pressure' )  {
-        let pressure = read_pin( config.pins.pressure );
-
-        data_return = { 'pressure' : pressure };
     }
 
     // the request was good
@@ -148,15 +149,21 @@ function log_request ( timestamp, remoteaddress, method, url, statuscode ) {
 }
 
 function read_pin ( pin ) {
-    let value = {};
+    let data = {};
 
     if ( config.environment === 'development' ) {
-        value = Math.floor( ( Math.random() * 100 ) + 1 );
+        data = {
+            temperature : Math.floor( ( Math.random() * 100 ) + 1 ),
+            humidity    : Math.floor( ( Math.random() * 100 ) + 1 )
+        };
     }
     else {
-        // TODO: read pin from sysfs and set to value
-        value = 42;
+        // TODO: read pin from gpio, store, and return
+        data = {
+            temperature : 42,
+            humidity    : 42
+        };
     }
 
-    return value;
+    return data;
 }
