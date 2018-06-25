@@ -4,7 +4,9 @@ weather-api - microservice in nodejs
 
 # DESCRIPTION
 
-This project provides a simple API, written in nodejs, which serves sensor data read from the Raspberry Pi using the pigpio library.
+This project provides a simple API, written in nodejs, which serves temperature and humidity data from the Raspberry Pi.
+
+Supported sensors are the DHT11 or DHT22 (AM2302) read using the bcm2835 C library.
 
 # SYNOPSIS
 
@@ -169,7 +171,8 @@ The API requires configuration settings which are stored and defined within the 
     config.port        = 3000;
     config.api_key     = '1234qwerty';
     config.environment = 'development';
-    config.pin         = 3;
+    config.dht         = 22;
+    config.pin         = 4;
 
 ## config.hostname
 
@@ -185,11 +188,23 @@ The authorization header string to validate against.
 
 ## config.environment
 
-Whether the api is running on development or production.  If development, random mock values will be returned instead of reading the values via gpio.
+Whether the api is running on development or production.  If development, values of 'devel' will be returned instead of reading the values via GPIO.
+
+## config.dht
+
+The temperature/humidity sensor being used.  Supported config values are:
+
+### 11
+
+If using the DHT11.
+
+### 22
+
+If using the DHT22 (or AM2302).
 
 ## config.pin
 
-The digital pin to read for the output.
+The GPIO pin to the DHT sensor is connected to.
 
 # DEPENDENCIES
 
@@ -197,7 +212,9 @@ This project is built using nodejs and utilizes both deconstructing assignment a
 
 The http library is used but is included through nodejs core.  No additional installation is required.
 
-Additionally, the moment and pigpio libraries are also used.  Both are defined in the package.json file within the project's base dir, and can be installed via npm.
+Additionally, the moment and node-dht-sensor libraries are also used.  Both are defined in the package.json file within the project's base dir and can be installed via npm.
+
+Of note, the node-dht-sensor library requires the bcm2835 C library installed to the Raspberry Pi before installing through npm, else installation will fail.
 
 # AUTHOR
 

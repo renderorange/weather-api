@@ -1,11 +1,12 @@
 // weather-api
 // microservice in nodejs
-// v 0.1.8
+// v 0.1.9
 
 "use strict";
 
 const http   = require( 'http' );
 const moment = require( 'moment' );
+const sensor = require( 'node-dht-sensor' );
 const config = require( './config/application.js' );
 
 const server = http.createServer( ( req, res ) => {
@@ -85,25 +86,21 @@ const server = http.createServer( ( req, res ) => {
         return;
     }
 
-    // TODO: read the sensor data
-    // looks like if we're going to use the DHT22, we're probably best using the pigpio library.
-    // to use the DHT22 sensor, we need to set HIGH, detect the state change, then digital read.
-    // also, we should to consider removing individual calls for getting just temp and humidity.
-    // since the sensor returns everything all in one call anyway, it might be more efficient to
-    // have one endpoint returning two key value pairs.
-    // or, perhaps return both if /weather and individual if asked /weather/temperature
-    let data        = read_pin( config.pin );
+    // read the sensor data
+    // using the node-dht-sensor node module, which uses the bcm2835 library.
+    // still testing this out, and may very well re-roll the functionality to remove the
+    // additional dependency.
+    let data        = read_pin( config.dht, config.pin );
     let data_return = {};
 
+    // TODO:
+    // convert this to allow for just /weather to return both
+    // return 500 with error string if read_pin fails
     if ( parameter === 'temperature' ) {
-        let temperature = data.temperature;
-
-        data_return = { 'temperature' : temperature };
+        data_return = { 'temperature' : data.temperature };
     }
     else if ( parameter === 'humidity' )  {
-        let humidity = data.humidity;
-
-        data_return = { 'humidity' : humidity };
+        data_return = { 'humidity' : data.humidity };
     }
 
     // the request was good
@@ -148,22 +145,31 @@ function log_request ( timestamp, remoteaddress, method, url, statuscode ) {
     return;
 }
 
-function read_pin ( pin ) {
-    let data = {};
+function read_pin ( dht, pin ) {
+    let temperature = {};
+    let humidity    = {};
 
-    if ( config.environment === 'development' ) {
-        data = {
-            temperature : Math.floor( ( Math.random() * 100 ) + 1 ),
-            humidity    : Math.floor( ( Math.random() * 100 ) + 1 )
-        };
+    if ( config.environment === 'production' ) {
+        sensor.read( dht, pin, function( err, temperature, humidity ) {
+            if ( !err ) {
+                temperature = ( temperature.toFixed( 1 ) * 9 / 5 ) + 32,
+                humidity    = humidity.toFixed( 1 )
+            }
+            else {
+                temperature = 'err';
+                humidity    = 'err';
+            }
+        });
     }
     else {
-        // TODO: read pin from gpio, store, and return
-        data = {
-            temperature : 42,
-            humidity    : 42
-        };
+        temperature = 'devel';
+        humidity    = 'devel';
     }
+
+    let data = {
+        temperature : temperature,
+        humidity    : humidity
+    };
 
     return data;
 }
