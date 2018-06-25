@@ -204,7 +204,7 @@ If using the DHT22 (or AM2302).
 
 ## config.pin
 
-The GPIO pin to the DHT sensor is connected to.
+The GPIO pin the DHT sensor is connected to.
 
 # DEPENDENCIES
 
