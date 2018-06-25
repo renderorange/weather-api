@@ -1,6 +1,6 @@
 {
     "dependencies": {
         "moment": "^2.22.2",
-        "node_dht_sensor": "^0.0.34"
+        "node-dht-sensor": "0.0.34"
     }
 }
