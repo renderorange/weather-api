@@ -135,7 +135,22 @@ The exception string, 'URL is not a known route', with the 404 response code, is
 
     /weather/temperature?test=1 is not a known route
 
-## 200 (ok)
+## 500 (Internal Server Error)
+
+There was an issue while reading the sensor.
+
+The exception string, 'unknown error', with the 500 response code, is returned.
+
+    $ curl -s -D - -X GET -H 'API_KEY: 1234qwerty' server:3000/weather/temperature
+    HTTP/1.1 500 Internal Server Error
+    Content-Type: text/plain
+    Date: Tue, 17 Jun 2018 00:00:18 GMT
+    Connection: keep-alive
+    Transfer-Encoding: chunked
+
+    unknown error
+
+## 200 (OK)
 
 Everything in the request was good and there were no issues on the backend.
 
@@ -153,7 +168,7 @@ The JSON data structure, with requested resource and 200 response code, is retur
 
 # LOGGING
 
-The API outputs timestamped startup info to stdout, as well as request and response details.
+The API outputs timestamped startup info to stdout, as well as request, response, and error details.
 
     [06162018-002138] [info] weather-api server started
     [06162018-002138] [info] serving: 0.0.0.0:3000
@@ -161,6 +176,8 @@ The API outputs timestamped startup info to stdout, as well as request and respo
     [06162018-002218] 10.0.0.103 GET /weather/humidity 200
     [06162018-002851] 10.0.0.103 GET /weather/notaresource 404
     [06162018-003000] 10.0.0.103 POST /weather/temperature 405
+    [06172018-000018] 10.0.0.103 GET /weather/temperature 500
+    [06172018-000020] [error] Error: failed to read sensor
 
 # CONFIGURATION
 
@@ -238,7 +255,7 @@ You're probably running the API as an un-privileged user (you should be), which 
 
 # DEPENDENCIES
 
-This project is built using nodejs and utilizes both deconstructing assignment and template literals from ES6.  Because of this, the latest (or newer) nodejs is recommended.
+This project is built using nodejs and utilizes both deconstructing assignment from ES6.  Because of this, the latest (or newer) nodejs is recommended.
 
 The http library is used but is included through nodejs core.  No additional installation is required.
 
