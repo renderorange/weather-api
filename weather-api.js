@@ -139,7 +139,7 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // the request was good
-    // return the requsted information to the user
+    // return the requested information to the user
     res.statusCode = 200;
     res.setHeader( 'Content-Type', 'application/json' );
 
