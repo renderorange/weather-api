@@ -77,7 +77,7 @@ const server = http.createServer( ( req, res ) => {
     if ( endpoint !== 'weather'
          // or if parameter is defined and is not empty and doesn't match either temperature or humidity
          || ( parameter !== undefined && ( parameter.length != 0 && !parameter_match.test( parameter ) ) )
-         // or if there's anything after parameter and which isn't empty
+         // or if there's anything after parameter which isn't empty
          || ( extra     !== undefined &&       extra.length != 0 ) ) {
 
         res.statusCode = 404;
@@ -125,6 +125,9 @@ const server = http.createServer( ( req, res ) => {
     // format the data return based on the requested route
     let data_return = {};
 
+    // test to allow for both /weather and /weather/
+    // the split for the url will make parameter defined, but with empty value
+    // if the user requests weather with a trailing slash
     if ( parameter === undefined || parameter.length == 0 ) {
         data_return = { 'temperature' : data.temperature, 'humidity' : data.humidity };
     }
@@ -188,7 +191,7 @@ function read_pin ( dht, pin ) {
         sensor.read( dht, pin, function( err, temperature, humidity ) {
 
             // log the exception and return undef to the caller
-            // the caller tests for undef and returns 500 to the user if so.
+            // the caller tests for undef and returns 500 to the user if so
             if ( err ) {
                 console.log( get_formatted_timestamp() + ' [error] ' + err );
 

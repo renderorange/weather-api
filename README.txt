@@ -12,6 +12,7 @@ Supported sensors are the DHT11 or DHT22 (AM2302) read using the bcm2835 C libra
 
     server ~/weather-api $ nodejs weather-api.js 
     [06152018-233738] [info] weather-api server started
+    [06152018-233738] [info] environment: development
     [06152018-233738] [info] serving: 0.0.0.0:3000
     [06152018-233948] 10.0.0.103 GET /weather/temperature 200
 
@@ -171,6 +172,7 @@ The JSON data structure, with requested resource and 200 response code, is retur
 The API outputs timestamped startup info to stdout, as well as request, response, and error details.
 
     [06162018-002138] [info] weather-api server started
+    [06162018-002138] [info] environment: development
     [06162018-002138] [info] serving: 0.0.0.0:3000
     [06162018-002156] 10.0.0.103 GET /weather/humidity 401
     [06162018-002218] 10.0.0.103 GET /weather/humidity 200
