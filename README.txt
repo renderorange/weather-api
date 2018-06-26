@@ -22,7 +22,7 @@ Supported sensors are the DHT11 or DHT22 (AM2302) read using the bcm2835 C libra
 
 # ENDPOINTS
 
-The API is served over port 3000 and bound to all interfaces, but can be configured to a specific interface or port (more about that in the 'CONFIGURATION' section below).
+The API is served over port 3000 and bound to all interfaces, but can be configured to a specific interface or port (see the 'CONFIGURATION' section below).
 
 ## /weather
 
@@ -32,7 +32,7 @@ The API is served over port 3000 and bound to all interfaces, but can be configu
 
 This API is a read-only resource; GET is the only allowed method.
 
-All other methods requested to the API will return exceptions (more about that in the 'RESPONSES' section below).
+All other methods requested to the API will return exceptions (see the 'RESPONSES' section below).
 
 ### PARAMETERS
 
@@ -206,6 +206,36 @@ If using the DHT22 (or AM2302).
 
 The GPIO pin the DHT sensor is connected to.
 
+# INSTALLATION
+
+Before installing the module dependencies for this project, the bcm2835 C library will need to be installed.
+
+First, ensure you have build-essential and make installed so you can compile the library.
+
+    # apt-get install build-essential make
+
+Download the bcm2835 library to the desired location.  My personal location for source code is /usr/local/src/, and is used in the example below.  Also, ensure you have the latest version; the link below is for v1.56 which might not be the latest as you're reading this.
+
+    # cd /usr/local/src/
+    /usr/local/src # wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.56.tar.gz
+    /usr/local/src # tar zxvf bcm2835-1.56.tar.gz
+
+Now, configure, make, test, and install the library.
+
+    /usr/local/src # cd bcm2835-1.56/
+    /usr/local/src/bcm2835-1.56 # ./configure
+    /usr/local/src/bcm2835-1.56 # make
+    /usr/local/src/bcm2835-1.56 # make check
+    /usr/local/src/bcm2835-1.56 # make install
+
+If you receive the following error when running the api through nodejs:
+
+    bcm2835_init: Unable to open /dev/gpiomem: Permission denied
+
+You're probably running the api as an un-privileged user (you should be), which isn't the 'pi' user.  You will need to add the user to the gpio group so it can access gpiomem (replace apiuser with the user you're running nodejs as).
+
+    # adduser apiuser gpio
+
 # DEPENDENCIES
 
 This project is built using nodejs and utilizes both deconstructing assignment and template literals from ES6.  Because of this, the latest (or newer) nodejs is recommended.
@@ -214,7 +244,9 @@ The http library is used but is included through nodejs core.  No additional ins
 
 Additionally, the moment and node-dht-sensor libraries are also used.  Both are defined in the package.json file within the project's base dir and can be installed via npm.
 
-Of note, the node-dht-sensor library requires the bcm2835 C library installed to the Raspberry Pi before installing through npm, else installation will fail.
+    server ~/weather-api $ npm install
+
+Of note, the node-dht-sensor library requires the bcm2835 C library installed to the Raspberry Pi before installing through npm, else installation will fail.  (see the 'INSTALLATION' section above).
 
 # AUTHOR
 

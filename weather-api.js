@@ -88,14 +88,32 @@ const server = http.createServer( ( req, res ) => {
 
     // read the sensor data
     // using the node-dht-sensor node module, which uses the bcm2835 library.
-    // still testing this out, and may very well re-roll the functionality to remove the
-    // additional dependency.
-    let data        = read_pin( config.dht, config.pin );
+    let data = read_pin( config.dht, config.pin );
+
+    // return 500 if there was an issue reading
+    // undef indicates error from the read_pin function
+    if ( data === undefined ) {
+        res.statusCode = 500;
+
+        res.setHeader( 'Content-Type', 'text/plain' );
+
+        res.write( 'unknown error\n' );
+        res.end();
+
+        log_request(
+            get_formatted_timestamp(),
+            connection.remoteAddress,
+            method,
+            url,
+            res.statusCode
+        );
+
+        return;
+    }
+
+    // TODO: convert this to also allow for /weather to return both
     let data_return = {};
 
-    // TODO:
-    // convert this to allow for just /weather to return both
-    // return 500 with error string if read_pin fails
     if ( parameter === 'temperature' ) {
         data_return = { 'temperature' : data.temperature };
     }
@@ -104,7 +122,7 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // the request was good
-    // return to the caller
+    // return the requsted information to the caller
     res.statusCode = 200;
     res.setHeader( 'Content-Type', 'application/json' );
 
@@ -123,6 +141,8 @@ const server = http.createServer( ( req, res ) => {
 });
 
 server.listen( config.port, config.hostname, () => {
+
+    // TODO: add some output to the log to indicate what environment is being run
     console.log( get_formatted_timestamp() + ' [info] ' + 'weather-api server started' );
     console.log( get_formatted_timestamp() + ' [info] ' + `serving: ${config.hostname}:${config.port}` );
 });
@@ -146,30 +166,32 @@ function log_request ( timestamp, remoteaddress, method, url, statuscode ) {
 }
 
 function read_pin ( dht, pin ) {
-    let temperature = {};
-    let humidity    = {};
 
+    // read the sensor if production
     if ( config.environment === 'production' ) {
+
         sensor.read( dht, pin, function( err, temperature, humidity ) {
-            if ( !err ) {
-                temperature = ( temperature.toFixed( 1 ) * 9 / 5 ) + 32,
-                humidity    = humidity.toFixed( 1 )
+
+            // log the exception and return undef to the caller
+            // the caller tests for undef and returns 500 to the user if so.
+            if ( err ) {
+                console.log( get_formatted_timestamp() + ' [error] ' + err );
+
+                return;
             }
+
+            // if there wasn't an error, format and return the data structure
             else {
-                temperature = 'err';
-                humidity    = 'err';
+                let temperature = ( temperature.toFixed( 1 ) * 9 / 5 ) + 32;
+                let humidity    = humidity.toFixed( 1 );
+
+                return { 'temperature' : temperature, 'humidity' : humidity };
             }
         });
     }
+
+    // return some dummy data if not production
     else {
-        temperature = 'devel';
-        humidity    = 'devel';
+        return { 'temperature' : 'devel', 'humidity' : 'devel' };
     }
-
-    let data = {
-        temperature : temperature,
-        humidity    : humidity
-    };
-
-    return data;
 }
