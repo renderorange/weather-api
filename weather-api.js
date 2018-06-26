@@ -10,7 +10,7 @@ const sensor = require( 'node-dht-sensor' );
 const config = require( './config/application.js' );
 
 // TODO: add config value checking to ensure the config is set up correctly
-// and there aren't any weird mis-configured values
+// and there aren't any weird misconfigured values
 
 const server = http.createServer( ( req, res ) => {
 
@@ -22,7 +22,8 @@ const server = http.createServer( ( req, res ) => {
     const api_key    = headers.api_key;
 
     // validate the api key
-    // return 401 and error if api_key is missing or doesn't match
+    // return 401 and error if api_key is missing from their request
+    // or doesn't match
     if ( api_key !== config.api_key ) {
         res.statusCode = 401;
 
@@ -65,12 +66,20 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // validate the url
-    // return 404 if not /weather/[temperature|humidity]
-    let [ slash, endpoint, parameter, ...extra ] = url.split( '/' );
+    // return 404 if the request is not for /weather/[temperature|humidity]/
+    // this allows for /weather on it's own, with or without a trailing slash
+    // as well as /weather/temperature or /weather/humidity, with or without a trailing slash
+    let [ space, endpoint, parameter, extra ] = url.split( '/' );
 
     let parameter_match = /^temperature$|^humidity$/;
 
-    if ( endpoint !== 'weather' || !parameter_match.test( parameter ) || extra.length >= 1 ) {
+    // if endpoint is anything but weather
+    if ( endpoint !== 'weather'
+         // or if parameter is defined and is not empty and doesn't match either temperature or humidity
+         || ( parameter !== undefined && ( parameter.length != 0 && !parameter_match.test( parameter ) ) )
+         // or if there's anything after parameter and which isn't empty
+         || ( extra     !== undefined &&       extra.length != 0 ) ) {
+
         res.statusCode = 404;
 
         res.setHeader( 'Content-Type', 'text/plain' );
@@ -90,7 +99,6 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // read the sensor data
-    // using the node-dht-sensor node module, which uses the bcm2835 library.
     let data = read_pin( config.dht, config.pin );
 
     // return 500 if there was an issue reading
@@ -114,10 +122,13 @@ const server = http.createServer( ( req, res ) => {
         return;
     }
 
-    // TODO: convert this to also allow for /weather to return both
+    // format the data return based on the requested route
     let data_return = {};
 
-    if ( parameter === 'temperature' ) {
+    if ( parameter === undefined || parameter.length == 0 ) {
+        data_return = { 'temperature' : data.temperature, 'humidity' : data.humidity };
+    }
+    else if ( parameter === 'temperature' ) {
         data_return = { 'temperature' : data.temperature };
     }
     else if ( parameter === 'humidity' )  {
@@ -125,7 +136,7 @@ const server = http.createServer( ( req, res ) => {
     }
 
     // the request was good
-    // return the requsted information to the caller
+    // return the requsted information to the user
     res.statusCode = 200;
     res.setHeader( 'Content-Type', 'application/json' );
 
@@ -144,10 +155,11 @@ const server = http.createServer( ( req, res ) => {
 });
 
 server.listen( config.port, config.hostname, () => {
-
-    // TODO: add some output to the log to indicate what environment is being run
-    console.log( get_formatted_timestamp() + ' [info] ' + 'weather-api server started' );
-    console.log( get_formatted_timestamp() + ' [info] ' + `serving: ${config.hostname}:${config.port}` );
+    console.log(
+        get_formatted_timestamp() + ' [info] weather-api server started\n' +
+        get_formatted_timestamp() + ' [info] environment: ' + config.environment + '\n' +
+        get_formatted_timestamp() + ' [info] serving: ' + config.hostname + ':' + config.port
+    );
 });
 
 function get_formatted_timestamp () {
