@@ -1,5 +1,5 @@
 // weather-api
-// microservice in nodejs
+// simple API in nodejs
 // v 0.1.9
 
 "use strict";
@@ -8,6 +8,9 @@ const http   = require( 'http' );
 const moment = require( 'moment' );
 const sensor = require( 'node-dht-sensor' );
 const config = require( './config/application.js' );
+
+// TODO: add config value checking to ensure the config is set up correctly
+// and there aren't any weird mis-configured values
 
 const server = http.createServer( ( req, res ) => {
 

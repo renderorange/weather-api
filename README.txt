@@ -1,6 +1,6 @@
 # NAME
 
-weather-api - microservice in nodejs
+weather-api - simple API in nodejs
 
 # DESCRIPTION
 
@@ -188,7 +188,7 @@ The authorization header string to validate against.
 
 ## config.environment
 
-Whether the api is running on development or production.  If development, values of 'devel' will be returned instead of reading the values via GPIO.
+Whether the API is running on development or production.  If development, values of 'devel' will be returned instead of reading the values via GPIO.
 
 ## config.dht
 
@@ -228,11 +228,11 @@ Now, configure, make, test, and install the library.
     /usr/local/src/bcm2835-1.56 # make check
     /usr/local/src/bcm2835-1.56 # make install
 
-If you receive the following error when running the api through nodejs:
+If you receive the following error when running the API through nodejs:
 
     bcm2835_init: Unable to open /dev/gpiomem: Permission denied
 
-You're probably running the api as an un-privileged user (you should be), which isn't the 'pi' user.  You will need to add the user to the gpio group so it can access gpiomem (replace apiuser with the user you're running nodejs as).
+You're probably running the API as an un-privileged user (you should be), which isn't the 'pi' user.  You will need to add the user to the gpio group so it can access gpiomem (replace apiuser with the user you're running nodejs as).
 
     # adduser apiuser gpio
 
