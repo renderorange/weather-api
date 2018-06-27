@@ -187,13 +187,13 @@ function get_formatted_timestamp () {
 }
 
 function verify_config_values ( done ) {
-    let test = false;
 
-    if ( test ) {
-        return;
-    }
-    else {
-        return done ( Error ( 'config.dht: ' + config.dht + ' is not a valid value' ) )
+    let key_match = /^hostname$|^port$|^api_key$|^environment$|^dht$|^pin$/;
+
+    for ( let key in config ) {
+        if ( !key_match.test( key ) ) {
+            return done ( Error ( 'config.' + key + ': ' + key + ' is not a valid key name' ) )
+        }
     }
 }
 
