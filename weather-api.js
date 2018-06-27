@@ -1,16 +1,14 @@
 // weather-api
 // simple API in nodejs
-// v 0.1.9
 
 "use strict";
+
+const version = '0.1.10';
 
 const http   = require( 'http' );
 const moment = require( 'moment' );
 const sensor = require( 'node-dht-sensor' );
 const config = require( './config/application.js' );
-
-// TODO: add config value checking to ensure the config is set up correctly
-// and there aren't any weird misconfigured values
 
 const server = http.createServer( ( req, res ) => {
 
@@ -158,8 +156,25 @@ const server = http.createServer( ( req, res ) => {
 });
 
 server.listen( config.port, config.hostname, () => {
+    console.log( get_formatted_timestamp() + ' [info] weather-api - version ' + version );
+
+    verify_config_values( function ( err ) {
+        if ( err ) {
+            console.log(
+                get_formatted_timestamp() + ' [error] config value verification failed\n' +
+                get_formatted_timestamp() + ' [error] ' + err.message + '\n' +
+                get_formatted_timestamp() + ' [error] exiting'
+            );
+            
+            process.exit( 1 );
+
+        }
+        else {
+            console.log( get_formatted_timestamp() + ' [info] config value verification succeeded' );
+        }
+    });
+
     console.log(
-        get_formatted_timestamp() + ' [info] weather-api server started\n' +
         get_formatted_timestamp() + ' [info] environment: ' + config.environment + '\n' +
         get_formatted_timestamp() + ' [info] serving: ' + config.hostname + ':' + config.port
     );
@@ -169,6 +184,17 @@ function get_formatted_timestamp () {
     let timestamp = moment().format( 'MMDDYYYY-HHmmss' );
 
     return '[' + timestamp + ']';
+}
+
+function verify_config_values ( done ) {
+    let test = false;
+
+    if ( test ) {
+        return;
+    }
+    else {
+        return done ( Error ( 'config.dht: ' + config.dht + ' is not a valid value' ) )
+    }
 }
 
 function log_request ( timestamp, remoteaddress, method, url, statuscode ) {
@@ -193,7 +219,7 @@ function read_pin ( dht, pin ) {
             // log the exception and return undef to the caller
             // the caller tests for undef and returns 500 to the user if so
             if ( err ) {
-                console.log( get_formatted_timestamp() + ' [error] ' + err );
+                console.log( get_formatted_timestamp() + ' [error] ' + err.message );
 
                 return;
             }
