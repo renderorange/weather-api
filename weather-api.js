@@ -167,7 +167,6 @@ server.listen( config.port, config.hostname, () => {
             );
             
             process.exit( 1 );
-
         }
         else {
             console.log( get_formatted_timestamp() + ' [info] config value verification succeeded' );
@@ -187,7 +186,6 @@ function get_formatted_timestamp () {
 }
 
 function verify_config_values ( done ) {
-
     let key_match = /^hostname$|^port$|^api_key$|^environment$|^dht$|^pin$/;
 
     for ( let key in config ) {
