@@ -11,19 +11,20 @@ Supported sensors are the DHT11 or DHT22 (AM2302) read using the bcm2835 C libra
 # SYNOPSIS
 
     server ~/weather-api $ nodejs weather-api.js 
-    [06152018-233738] [info] weather-api server started
+    [06152018-233738] [info] weather-api - version 0.1.10
     [06152018-233738] [info] environment: development
     [06152018-233738] [info] serving: 0.0.0.0:3000
-    [06152018-233948] 10.0.0.103 GET /weather/temperature 200
+    [06152018-233948] 10.0.0.103 GET /weather 200
 
-    laptop ~ $ curl -X GET -H 'API_KEY: 1234qwerty' server:3000/weather/temperature
+    laptop ~ $ curl -X GET -H 'API_KEY: 1234qwerty' server:3000/weather
     {
-       "temperature" : 85
+       "temperature" : 85,
+       "humidity" : 65
     }
 
 # ENDPOINTS
 
-The API is served over port 3000 and bound to all interfaces, but can be configured to a specific interface or port (see the 'CONFIGURATION' section below).
+The API is served over port 3000 and bound to all interfaces by default, but can be configured to a specific interface or port (see the 'CONFIGURATION' section below).
 
 ## /weather
 
@@ -45,18 +46,28 @@ Provides the temperature reading in F.
 
     http://server:3000/weather/temperature
 
+    {
+       "temperature" : 85
+    }
+
+
 #### humidity
 
 Provides the relative humidity reading in percent.
 
     http://server:3000/weather/humidity
 
+    {
+       "humidity" : 65
+    }
+
 ### RETURNS
 
-A JSON datastructure containing one key value pair.
+A JSON datastructure containing key value pairs.
 
     {
-       "temperature" : 85
+       "temperature" : 85,
+       "humidity" : 65
     }
 
 #### [temperature|humidity]
@@ -158,20 +169,20 @@ Everything in the request was good and there were no issues on the backend.
 The JSON data structure, with requested resource and 200 response code, is returned.
 
     # request meeting all criteria
-    $ curl -sD - -X GET -H 'API_KEY: 1234qwerty' server:3000/weather/temperature
+    $ curl -sD - -X GET -H 'API_KEY: 1234qwerty' server:3000/weather
     HTTP/1.1 200 OK
     Content-Type: application/json
     Date: Tue, 19 Jun 2018 19:17:19 GMT
     Connection: keep-alive
     Transfer-Encoding: chunked
 
-    {"temperature":85}
+    {"temperature":85,"humidity":65}
 
 # LOGGING
 
 The API outputs timestamped startup info to stdout, as well as request, response, and error details.
 
-    [06162018-002138] [info] weather-api server started
+    [06162018-002138] [info] weather-api server started - verison 0.1.10
     [06162018-002138] [info] environment: development
     [06162018-002138] [info] serving: 0.0.0.0:3000
     [06162018-002156] 10.0.0.103 GET /weather/humidity 401
@@ -186,28 +197,38 @@ The API outputs timestamped startup info to stdout, as well as request, response
 The API requires configuration settings which are stored and defined within the ./config/application.js file located within the project's base dir.  The config object is exported and accessed within weather-api.js.
 
     # ./config/application.js
-    config.hostname    = '0.0.0.0';
+    config.interface   = '0.0.0.0';
     config.port        = 3000;
-    config.api_key     = '1234qwerty';
+    config.api_key     = '1234567890qwerty';
     config.environment = 'development';
     config.dht         = 22;
     config.pin         = 4;
 
-## config.hostname
+The key value pairs within the configuration are verified on startup, and will fail to start if either the names or values aren't correct or within range.
 
-The address to bind to.
+## config.interface
+
+The interface on the Raspberry Pi to bind to.
+
+Verification on startup allows for both ip addresses and hostnames.
 
 ## config.port
 
 The port to listen on.
 
+Verification on startup allows for digits only.
+
 ## config.api_key
 
 The authorization header string to validate against.
 
+Verification on startup allows for case-insensitive alpha-numeric characters, and requires between a 16 and 40 character length string.
+
 ## config.environment
 
 Whether the API is running on development or production.  If development, values of 'devel' will be returned instead of reading the values via GPIO.
+
+Verification requires either 'development' or 'production' as values.
 
 ## config.dht
 
@@ -224,6 +245,8 @@ If using the DHT22 (or AM2302).
 ## config.pin
 
 The GPIO pin the DHT sensor is connected to.
+
+Verification on startup requires digits only.
 
 # INSTALLATION
 
@@ -257,7 +280,7 @@ You're probably running the API as an un-privileged user (you should be), which 
 
 # DEPENDENCIES
 
-This project is built using nodejs and utilizes both deconstructing assignment from ES6.  Because of this, the latest (or newer) nodejs is recommended.
+This project is built using nodejs and utilizes deconstructing assignment from ES6.  Because of this, the latest (or newer) nodejs is recommended.
 
 The http library is used but is included through nodejs core.  No additional installation is required.
 
