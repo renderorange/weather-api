@@ -16,7 +16,7 @@ Supported sensors are the DHT11 or DHT22 (AM2302) read using the bcm2835 C libra
     [06152018-233738] [info] serving: 0.0.0.0:3000
     [06152018-233948] 10.0.0.103 GET /weather 200
 
-    laptop ~ $ curl -X GET -H 'API_KEY: 1234qwerty' server:3000/weather
+    laptop ~ $ curl -X GET -H 'API_KEY: 1234567890qwerty' server:3000/weather
     {
        "temperature" : 85,
        "humidity" : 65
@@ -101,7 +101,7 @@ The method requested was something other than GET.
 The exception string, 'METHOD is not allowed', with the 405 response code, is returned.  Additionally, the Allow header is set indicating only GET.
 
     # request method other than GET
-    $ curl -sD - -X POST -H 'API_KEY: 1234qwerty' server:3000/weather/temperature
+    $ curl -sD - -X POST -H 'API_KEY: 1234567890qwerty' server:3000/weather/temperature
     HTTP/1.1 405 Method Not Allowed
     Allow: GET
     Content-Type: text/plain
@@ -118,7 +118,7 @@ The requested route was not known.
 The exception string, 'URL is not a known route', with the 404 response code, is returned.
 
     # request an unknown route
-    $ curl -sD - -X GET -H 'API_KEY: 1234qwerty' server:3000/paper
+    $ curl -sD - -X GET -H 'API_KEY: 1234567890qwerty' server:3000/paper
     HTTP/1.1 404 Not Found
     Content-Type: text/plain
     Date: Tue, 19 Jun 2018 19:12:14 GMT
@@ -128,7 +128,7 @@ The exception string, 'URL is not a known route', with the 404 response code, is
     /paper is not a known route
 
     # a parameter to an unknown route
-    $ curl -sD - -X GET -H 'API_KEY: 1234qwerty' server:3000/weather/forecast
+    $ curl -sD - -X GET -H 'API_KEY: 1234567890qwerty' server:3000/weather/forecast
     HTTP/1.1 404 Not Found
     Content-Type: text/plain
     Date: Tue, 19 Jun 2018 19:10:17 GMT
@@ -138,7 +138,7 @@ The exception string, 'URL is not a known route', with the 404 response code, is
     /weather/forecast is not a known route
 
     # or extra parameters to a known route
-    $ curl -sD - -X GET -H 'API_KEY: 1234qwerty' server:3000/weather/temperature?test=1
+    $ curl -sD - -X GET -H 'API_KEY: 1234567890qwerty' server:3000/weather/temperature?test=1
     HTTP/1.1 404 Not Found
     Content-Type: text/plain
     Date: Tue, 19 Jun 2018 19:13:33 GMT
@@ -153,7 +153,7 @@ There was an issue while reading the sensor.
 
 The exception string, 'unknown error', with the 500 response code, is returned.
 
-    $ curl -s -D - -X GET -H 'API_KEY: 1234qwerty' server:3000/weather/temperature
+    $ curl -s -D - -X GET -H 'API_KEY: 1234567890qwerty' server:3000/weather/temperature
     HTTP/1.1 500 Internal Server Error
     Content-Type: text/plain
     Date: Tue, 17 Jun 2018 00:00:18 GMT
@@ -169,7 +169,7 @@ Everything in the request was good and there were no issues on the backend.
 The JSON data structure, with requested resource and 200 response code, is returned.
 
     # request meeting all criteria
-    $ curl -sD - -X GET -H 'API_KEY: 1234qwerty' server:3000/weather
+    $ curl -sD - -X GET -H 'API_KEY: 1234567890qwerty' server:3000/weather
     HTTP/1.1 200 OK
     Content-Type: application/json
     Date: Tue, 19 Jun 2018 19:17:19 GMT
