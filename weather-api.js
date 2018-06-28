@@ -126,7 +126,7 @@ const server = http.createServer( ( req, res ) => {
     // test to allow for both /weather and /weather/
     // the split for the url will make parameter defined, but with empty value
     // if the user requests weather with a trailing slash
-    if ( parameter === undefined || parameter.length == 0 ) {
+    if ( parameter === undefined || parameter.length === 0 ) {
         data_return = { 'temperature' : data.temperature, 'humidity' : data.humidity };
     }
     else if ( parameter === 'temperature' ) {
