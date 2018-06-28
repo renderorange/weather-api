@@ -155,7 +155,7 @@ const server = http.createServer( ( req, res ) => {
     return;
 });
 
-server.listen( config.port, config.hostname, () => {
+server.listen( config.port, config.interface, () => {
     console.log( get_formatted_timestamp() + ' [info] weather-api - version ' + version );
 
     verify_config_values( function ( err ) {
@@ -175,7 +175,7 @@ server.listen( config.port, config.hostname, () => {
 
     console.log(
         get_formatted_timestamp() + ' [info] environment: ' + config.environment + '\n' +
-        get_formatted_timestamp() + ' [info] serving: ' + config.hostname + ':' + config.port
+        get_formatted_timestamp() + ' [info] serving: ' + config.interface + ':' + config.port
     );
 });
 
@@ -186,11 +186,31 @@ function get_formatted_timestamp () {
 }
 
 function verify_config_values ( done ) {
-    let key_match = /^hostname$|^port$|^api_key$|^environment$|^dht$|^pin$/;
+
+    // verify keys
+    let key_match = /^interface$|^port$|^api_key$|^environment$|^dht$|^pin$/;
 
     for ( let key in config ) {
         if ( !key_match.test( key ) ) {
             return done ( Error ( 'config.' + key + ': ' + key + ' is not a valid key name' ) )
+        }
+    }
+
+    // verify values
+    let valid_config = {
+        interface   : /^[a-z0-9\.]*$/,
+        port        : /^\d*$/,
+        api_key     : /^\w{16,40}$/,
+        environment : /^production$|^development$/,
+        dht         : /^11$|^22$/,
+        pin         : /^\d*$/
+    };
+
+    for ( let valid_key in valid_config ) {
+        let value_match = valid_config[ valid_key ];
+
+        if ( !value_match.test( config[ valid_key ] ) ) {
+            return done ( Error ( 'config.' + valid_key + ': ' + config[ valid_key ] + ' is not a valid value' ) )
         }
     }
 }

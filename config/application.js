@@ -2,9 +2,9 @@
 
 let config = {};
 
-config.hostname    = '0.0.0.0';
+config.interface   = '0.0.0.0';
 config.port        = 3000;
-config.api_key     = '1234qwerty';
+config.api_key     = '1234567890qwerty';
 config.environment = 'development';
 config.dht         = 22;
 config.pin         = 4;
