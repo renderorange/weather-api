@@ -155,25 +155,26 @@ const server = http.createServer( ( req, res ) => {
     return;
 });
 
+// before starting the server, display the initial startup message
+console.log( get_formatted_timestamp() + ' [info] weather-api - version ' + version );
+
+// and verify the configuration
+verify_config_values( function ( err ) {
+    if ( err ) {
+        console.log(
+            get_formatted_timestamp() + ' [error] config value verification failed\n' +
+            get_formatted_timestamp() + ' [error] ' + err.message + '\n' +
+            get_formatted_timestamp() + ' [error] exiting'
+        );
+
+        process.exit( 1 );
+    }
+});
+
+// now start the server, listening on the configured port and interface
 server.listen( config.port, config.interface, () => {
-    console.log( get_formatted_timestamp() + ' [info] weather-api - version ' + version );
-
-    verify_config_values( function ( err ) {
-        if ( err ) {
-            console.log(
-                get_formatted_timestamp() + ' [error] config value verification failed\n' +
-                get_formatted_timestamp() + ' [error] ' + err.message + '\n' +
-                get_formatted_timestamp() + ' [error] exiting'
-            );
-            
-            process.exit( 1 );
-        }
-        else {
-            console.log( get_formatted_timestamp() + ' [info] config value verification succeeded' );
-        }
-    });
-
     console.log(
+        get_formatted_timestamp() + ' [info] server started\n' +
         get_formatted_timestamp() + ' [info] environment: ' + config.environment + '\n' +
         get_formatted_timestamp() + ' [info] serving: ' + config.interface + ':' + config.port
     );
@@ -213,6 +214,8 @@ function verify_config_values ( done ) {
             return done ( Error ( 'config.' + valid_key + ': ' + config[ valid_key ] + ' is not a valid value' ) )
         }
     }
+
+    return;
 }
 
 function log_request ( timestamp, remoteaddress, method, url, statuscode ) {
