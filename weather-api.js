@@ -162,7 +162,7 @@ console.log( get_formatted_timestamp() + ' [info] weather-api - version ' + vers
 verify_config_values( function ( err ) {
     if ( err ) {
         console.log(
-            get_formatted_timestamp() + ' [error] config value verification failed\n' +
+            get_formatted_timestamp() + ' [error] config verification failed\n' +
             get_formatted_timestamp() + ' [error] ' + err.message + '\n' +
             get_formatted_timestamp() + ' [error] exiting'
         );
@@ -171,12 +171,12 @@ verify_config_values( function ( err ) {
     }
 });
 
-// now start the server, listening on the configured port and interface
-server.listen( config.port, config.interface, () => {
+// now start the server, listening on the configured port and address
+server.listen( config.port, config.address, () => {
     console.log(
         get_formatted_timestamp() + ' [info] server started\n' +
         get_formatted_timestamp() + ' [info] environment: ' + config.environment + '\n' +
-        get_formatted_timestamp() + ' [info] serving: ' + config.interface + ':' + config.port
+        get_formatted_timestamp() + ' [info] serving: ' + config.address + ':' + config.port
     );
 });
 
@@ -189,10 +189,10 @@ function get_formatted_timestamp () {
 function verify_config_values ( done ) {
 
     // valid config keys and values
-    let key_match = /^interface$|^port$|^api_key$|^environment$|^dht$|^pin$/;
+    let key_match = /^address$|^port$|^api_key$|^environment$|^dht$|^pin$/;
 
     let valid_config = {
-        interface   : /^[a-z0-9\.]*$/,
+        address     : /^[a-z0-9\.]*$/,
         port        : /^\d*$/,
         api_key     : /^\w{16,40}$/,
         environment : /^production$|^development$/,
