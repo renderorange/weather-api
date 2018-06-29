@@ -11,7 +11,7 @@ Supported sensors are the DHT11 or DHT22 (AM2302) read using the bcm2835 C libra
 # SYNOPSIS
 
     server ~/weather-api $ nodejs weather-api.js 
-    [06152018-233738] [info] weather-api - version 0.1.10
+    [06152018-233738] [info] weather-api - version 0.1.11
     [06152018-233738] [info] environment: development
     [06152018-233738] [info] serving: 0.0.0.0:3000
     [06152018-233948] 10.0.0.103 GET /weather 200
@@ -24,7 +24,7 @@ Supported sensors are the DHT11 or DHT22 (AM2302) read using the bcm2835 C libra
 
 # ENDPOINTS
 
-The API is served over port 3000 and bound to all interfaces by default, but can be configured to a specific interface or port (see the 'CONFIGURATION' section below).
+The API is served over port 3000 and bound to all addresses by default, but can be configured to a specific address or port (see the 'CONFIGURATION' section below).
 
 ## /weather
 
@@ -182,7 +182,7 @@ The JSON data structure, with requested resource and 200 response code, is retur
 
 The API outputs timestamped startup info to stdout, as well as request, response, and error details.
 
-    [06162018-002138] [info] weather-api server started - verison 0.1.10
+    [06162018-002138] [info] weather-api server started - verison 0.1.11
     [06162018-002138] [info] environment: development
     [06162018-002138] [info] serving: 0.0.0.0:3000
     [06162018-002156] 10.0.0.103 GET /weather/humidity 401
@@ -197,18 +197,30 @@ The API outputs timestamped startup info to stdout, as well as request, response
 The API requires configuration settings which are stored and defined within the ./config/application.js file located within the project's base dir.  The config object is exported and accessed within weather-api.js.
 
     # ./config/application.js
-    config.interface   = '0.0.0.0';
+    config.address     = '0.0.0.0';
     config.port        = 3000;
     config.api_key     = '1234567890qwerty';
     config.environment = 'development';
     config.dht         = 22;
     config.pin         = 4;
 
-The key value pairs within the configuration are verified on startup, and will fail to start if either the names or values aren't correct or within range.
+The key value pairs within the configuration are verified on startup.  The server will fail to start if any of the names or values aren't correct or within range.  If there is a failure, the reason will be logged.
 
-## config.interface
+    # unexpected key name in the config
+    [06292018-025505] [info] weather-api - version 0.1.11
+    [06292018-025505] [error] config verification failed
+    [06292018-025505] [error] config.interfaces: interfaces is not a valid key name
+    [06292018-025505] [error] exiting
 
-The interface on the Raspberry Pi to bind to.
+    # incorrect value
+    [06292018-025521] [info] weather-api - version 0.1.11
+    [06292018-025521] [error] config verification failed
+    [06292018-025521] [error] config.port: 3000a is not a valid value
+    [06292018-025521] [error] exiting
+
+## config.address
+
+The address on the Raspberry Pi to bind to.
 
 Verification on startup allows for both ip addresses and hostnames.
 
