@@ -74,9 +74,9 @@ const server = http.createServer( ( req, res ) => {
     // if endpoint is anything but weather
     if ( endpoint !== 'weather'
          // or if parameter is defined and is not empty and doesn't match either temperature or humidity
-         || ( parameter !== undefined && ( parameter.length != 0 && !parameter_match.test( parameter ) ) )
+         || ( parameter !== undefined && ( parameter.length !== 0 && !parameter_match.test( parameter ) ) )
          // or if there's anything after parameter which isn't empty
-         || ( extra     !== undefined &&       extra.length != 0 ) ) {
+         || ( extra     !== undefined &&       extra.length !== 0 ) ) {
 
         res.statusCode = 404;
 
