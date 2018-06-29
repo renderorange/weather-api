@@ -127,7 +127,7 @@ The exception string, 'URL is not a known route', with the 404 response code, is
 
     /paper is not a known route
 
-    # a parameter to an unknown route
+    # unknown parameter to a known route
     $ curl -sD - -X GET -H 'API_KEY: 1234567890qwerty' server:3000/weather/forecast
     HTTP/1.1 404 Not Found
     Content-Type: text/plain
@@ -137,7 +137,7 @@ The exception string, 'URL is not a known route', with the 404 response code, is
 
     /weather/forecast is not a known route
 
-    # or extra parameters to a known route
+    # extra parameters to a known route and known parameter
     $ curl -sD - -X GET -H 'API_KEY: 1234567890qwerty' server:3000/weather/temperature?test=1
     HTTP/1.1 404 Not Found
     Content-Type: text/plain
