@@ -264,11 +264,11 @@ Verification on startup requires digits only.
 
 Before installing the module dependencies for this project, the bcm2835 C library will need to be installed.
 
-First, ensure you have build-essential and make installed so you can compile the library.
+First, ensure you have 'build-essential' and 'make' installed so you can compile the library.
 
     # apt-get install build-essential make
 
-Download the bcm2835 library to the desired location.  My personal location for source code is /usr/local/src/, and is used in the example below.  Also, ensure you have the latest version; the link below is for v1.56 which might not be the latest as you're reading this.
+Download the bcm2835 library source code to the desired location and extract the tarball.  You'll want to ensure you have the latest version before downloading; the link below is for v1.56 which might not be the latest as you're reading this.
 
     # cd /usr/local/src/
     /usr/local/src # wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.56.tar.gz
@@ -286,7 +286,7 @@ If you receive the following error when running the API through nodejs:
 
     bcm2835_init: Unable to open /dev/gpiomem: Permission denied
 
-You're probably running the API as an un-privileged user (you should be), which isn't the 'pi' user.  You will need to add the user to the gpio group so it can access gpiomem (replace apiuser with the user you're running nodejs as).
+You're probably running the API as an un-privileged user which isn't in the gpio group.  You will need to add the user to the gpio group so it can access gpiomem (replace apiuser in the example below with the user you're running this software as).  The 'pi' user should already be in the gpio group.
 
     # adduser apiuser gpio
 
