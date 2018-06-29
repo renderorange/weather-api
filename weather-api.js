@@ -3,7 +3,7 @@
 
 "use strict";
 
-const version = '0.1.10';
+const version = '0.1.11';
 
 const http   = require( 'http' );
 const moment = require( 'moment' );
@@ -188,16 +188,9 @@ function get_formatted_timestamp () {
 
 function verify_config_values ( done ) {
 
-    // verify keys
+    // valid config keys and values
     let key_match = /^interface$|^port$|^api_key$|^environment$|^dht$|^pin$/;
 
-    for ( let key in config ) {
-        if ( !key_match.test( key ) ) {
-            return done ( Error ( 'config.' + key + ': ' + key + ' is not a valid key name' ) )
-        }
-    }
-
-    // verify values
     let valid_config = {
         interface   : /^[a-z0-9\.]*$/,
         port        : /^\d*$/,
@@ -207,11 +200,19 @@ function verify_config_values ( done ) {
         pin         : /^\d*$/
     };
 
-    for ( let valid_key in valid_config ) {
-        let value_match = valid_config[ valid_key ];
+    // verify the keys and values from our config
+    for ( let key in config ) {
 
-        if ( !value_match.test( config[ valid_key ] ) ) {
-            return done ( Error ( 'config.' + valid_key + ': ' + config[ valid_key ] + ' is not a valid value' ) )
+        // TODO: verify the config.key exists against our valid_config set
+        if ( !key_match.test( key ) ) {
+            return done ( Error ( 'config.' + key + ': ' + key + ' is not a valid key name' ) )
+        }
+
+        // since we know the key is valid, test it's value 
+        let value_match = valid_config[ key ];
+
+        if ( !value_match.test( config[ key ] ) ) {
+            return done ( Error ( 'config.' + key + ': ' + config[ key ] + ' is not a valid value' ) )
         }
     }
 
