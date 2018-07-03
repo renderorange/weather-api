@@ -1,0 +1,16 @@
+[Service]
+ExecStart=/usr/local/bin/node /home/apiuser/weather-api/weather-api.js
+Restart=always
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=weather-api
+
+Type=simple
+User=apiuser
+Group=apiuser
+
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
