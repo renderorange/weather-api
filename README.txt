@@ -290,7 +290,7 @@ You're probably running the API as an un-privileged user which isn't in the gpio
 
     # adduser apiuser gpio
 
-There are a number of popular software packages for managing a node service.  Included within the systemd directory is a service file for basic control via systemd.  The settings within the service file use generic user and directory settings, and need to be adjusted before starting the service.
+Included within the systemd directory is a service file for basic control via systemd.  The settings within the service file use generic user and directory settings, and need to be adjusted before starting the service.
 
 To enable and start the service, copy the service file into /etc/systemd/system/, then execute the following:
 
