@@ -307,11 +307,11 @@ After starting you can check the status through systemctl.
        CGroup: /system.slice/weather-api.service
                └─3243 /usr/local/bin/node /home/apiuser/weather-api/weather-api.js
 
-    Jul 04 01:26:48 server.renderorange.local systemd[1]: Started weather-api.service.
-    Jul 04 01:26:51 server.renderorange.local weather-api[3243]: [07042018-012651] [info] weather-api - version 0.1.11
-    Jul 04 01:26:51 server.renderorange.local weather-api[3243]: [07042018-012651] [info] server started
-    Jul 04 01:26:51 server.renderorange.local weather-api[3243]: [07042018-012651] [info] environment: production
-    Jul 04 01:26:51 server.renderorange.local weather-api[3243]: [07042018-012651] [info] serving: 0.0.0.0:3000
+    Jul 04 01:26:48 server systemd[1]: Started weather-api.service.
+    Jul 04 01:26:51 server weather-api[3243]: [07042018-012651] [info] weather-api - version 0.1.11
+    Jul 04 01:26:51 server weather-api[3243]: [07042018-012651] [info] server started
+    Jul 04 01:26:51 server weather-api[3243]: [07042018-012651] [info] environment: production
+    Jul 04 01:26:51 server weather-api[3243]: [07042018-012651] [info] serving: 0.0.0.0:3000
 
 # DEPENDENCIES
 
