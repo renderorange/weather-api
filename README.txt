@@ -290,12 +290,28 @@ You're probably running the API as an un-privileged user which isn't in the gpio
 
     # adduser apiuser gpio
 
-Included within the systemd directory is a service file for basic control via systemd.  The settings within the service file use generic user and directory settings, and need to be adjusted before starting the service.
+Included within the systemd directory is a service file for basic control via systemd.  The settings within the service file use generic user and directory settings, and need to be adjusted before enabling and starting the service.
 
-To enable and start the service, copy the service file into /etc/systemd/system/, then execute the following:
+Once you're updated the service file, copy it into /etc/systemd/system/, enable, and start.
 
     # systemctl enable weather-api.service
     # systemctl start weather-api.service
+
+After starting you can check the status through systemctl.
+
+    # systemctl status weather-api.service
+    ● weather-api.service
+       Loaded: loaded (/etc/systemd/system/weather-api.service; enabled; vendor preset: enabled)
+       Active: active (running) since Wed 2018-07-04 01:26:48 UTC; 4s ago
+     Main PID: 3243 (node)
+       CGroup: /system.slice/weather-api.service
+               └─3243 /usr/local/bin/node /home/apiuser/weather-api/weather-api.js
+
+    Jul 04 01:26:48 server.renderorange.local systemd[1]: Started weather-api.service.
+    Jul 04 01:26:51 server.renderorange.local weather-api[3243]: [07042018-012651] [info] weather-api - version 0.1.11
+    Jul 04 01:26:51 server.renderorange.local weather-api[3243]: [07042018-012651] [info] server started
+    Jul 04 01:26:51 server.renderorange.local weather-api[3243]: [07042018-012651] [info] environment: production
+    Jul 04 01:26:51 server.renderorange.local weather-api[3243]: [07042018-012651] [info] serving: 0.0.0.0:3000
 
 # DEPENDENCIES
 
