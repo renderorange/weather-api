@@ -3,7 +3,7 @@
 
 "use strict";
 
-const version = '0.1.11';
+const version = '0.1.12';
 
 const http   = require( 'http' );
 const moment = require( 'moment' );
@@ -212,7 +212,7 @@ function verify_config_values ( done ) {
         let value_match = valid_config[ key ];
 
         if ( !value_match.test( config[ key ] ) ) {
-            return done ( Error ( 'config.' + key + ': ' + config[ key ] + ' is not a valid value' ) )
+            return done ( Error ( 'config.' + key + ': "' + config[ key ] + '" is not a valid value' ) )
         }
     }
 
